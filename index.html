@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donkey Kong Country - Retro Adventure</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1a4c96, #2d5aa0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+        }
+        
+        #gameContainer {
+            background: #2c3e50;
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
+            border: 3px solid #34495e;
+        }
+        
+        #gameCanvas {
+            background: #87CEEB;
+            border: 2px solid #2c3e50;
+            display: block;
+            image-rendering: pixelated;
+            position: relative;
+        }
+        
+        /* CRT Filter Effects */
+        #gameCanvas.crt-filter {
+            filter: contrast(1.2) brightness(1.1);
+        }
+        
+        #gameCanvas.crt-filter::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(transparent 50%, rgba(0,255,0,0.03) 50%),
+                linear-gradient(90deg, transparent 50%, rgba(255,0,0,0.03) 50%);
+            background-size: 100% 4px, 4px 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        #worldMap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(135deg, #2c5530, #1a4c96);
+            display: none;
+            z-index: 10;
+        }
+        
+        .map-level {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f1c40f;
+            border: 3px solid #2c3e50;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #2c3e50;
+            transition: transform 0.2s;
+        }
+        
+        .map-level:hover {
+            transform: scale(1.1);
+        }
+        
+        .map-level.completed {
+            background: #2ecc71;
+        }
+        
+        .map-level.locked {
+            background: #7f8c8d;
+            cursor: not-allowed;
+        }
+        
+        #saveStates {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            z-index: 5;
+        }
+        
+        .save-slot {
+            width: 30px;
+            height: 30px;
+            background: rgba(44, 62, 80, 0.8);
+            border: 2px solid #ecf0f1;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ecf0f1;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .save-slot.filled {
+            background: rgba(46, 204, 113, 0.8);
+        }
+        
+        #audioControls {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+            z-index: 5;
+        }
+        
+        .audio-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(44, 62, 80, 0.8);
+            border: 2px solid #ecf0f1;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ecf0f1;
+            font-size: 16px;
+        }
+        
+        #hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #ecf0f1;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        #controls {
+            margin-top: 10px;
+            text-align: center;
+            color: #bdc3c7;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+        
+        .achievement {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2c3e50;
+            color: #f1c40f;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            transform: translateX(300px);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+        }
+        
+        .achievement.show {
+            transform: translateX(0);
+        }
+        
+        .hud-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .banana-icon {
+            width: 20px;
+            height: 20px;
+            background: #f1c40f;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            display: inline-block;
+        }
+        
+        .life-icon {
+            width: 16px;
+            height: 16px;
+            background: #e74c3c;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="hud">
+            <div class="hud-item">
+                <span>SCORE: <span id="score">0</span></span>
+            </div>
+            <div class="hud-item">
+                <div class="banana-icon"></div>
+                <span id="bananas">0</span>
+            </div>
+            <div class="hud-item">
+                <span>LIVES: </span>
+                <div id="lives">
+                    <div class="life-icon"></div>
+                    <div class="life-icon"></div>
+                    <div class="life-icon"></div>
+                </div>
+            </div>
+            <div class="hud-item">
+                <span>TIME: <span id="timer">0:00</span></span>
+            </div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="480" class="crt-filter"></canvas>
+        <canvas id="worldMap" width="800" height="480"></canvas>
+        
+        <div id="saveStates">
+            <div class="save-slot" data-slot="1">1</div>
+            <div class="save-slot" data-slot="2">2</div>
+            <div class="save-slot" data-slot="3">3</div>
+        </div>
+        
+        <div id="audioControls">
+            <div class="audio-btn" id="musicToggle">🎵</div>
+            <div class="audio-btn" id="crtToggle">📺</div>
+        </div>
+        <div id="controls">
+            ARROWS: Move • SPACE: Jump • S: Barrel Roll • DOWN+SPACE: Ground Pound<br>
+            C: Switch Character • R: Ride Animal Buddy • F1-F3: Save States • M: World Map
+        </div>
+        <div id="achievement" class="achievement"></div>
+    </div>
+    <script src="dkc-console-enhanced.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+{
+  "name": "donkey-kong-country-web",
+  "version": "1.0.0",
+  "description": "A faithful recreation of the classic SNES platformer Donkey Kong Country, built with HTML5 Canvas and vanilla JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "dev": "python3 -m http.server 8080",
+    "build": "echo 'No build process required - vanilla JavaScript!'",
+    "test": "echo 'No tests specified yet'",
+    "deploy": "echo 'Deploy to GitHub Pages or your preferred hosting'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/donkey-kong-country-web.git"
+  },
+  "keywords": [
+    "donkey-kong",
+    "platformer",
+    "retro-gaming",
+    "html5-canvas",
+    "javascript-game",
+    "snes",
+    "arcade",
+    "browser-game",
+    "pixel-art",
+    "8-bit"
+  ],
+  "author": "Your Name <your-email@example.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/your-username/donkey-kong-country-web/issues"
+  },
+  "homepage": "https://github.com/your-username/donkey-kong-country-web#readme",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "browserslist": [
+    "Chrome >= 60",
+    "Firefox >= 55",
+    "Safari >= 11",
+    "Edge >= 79"
+  ]
+}
