@@ -284,8 +284,8 @@ If you enjoy this game, please:
 ## 📞 Contact
 
 - **GitHub Issues** - For bugs and feature requests
-- **Email** - your-email@example.com
-- **Twitter** - [@your-twitter-handle](https://twitter.com/your-twitter-handle)
+- **Email** - davidkljajo@gmail.com
+
 
 ---
 
