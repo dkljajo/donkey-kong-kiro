@@ -2,7 +2,7 @@
 
 A faithful recreation of the classic SNES platformer Donkey Kong Country, built entirely with HTML5 Canvas and vanilla JavaScript. Experience the nostalgia of barrel-rolling through jungle levels, collecting bananas, and defeating Kremlings in your web browser!
 
-![Game Screenshot](https://via.placeholder.com/800x400/87CEEB/000000?text=DKC+Web+Edition)
+![Game Screenshot](./donkey2.png)
 
 ## 🎮 Play Now
 
